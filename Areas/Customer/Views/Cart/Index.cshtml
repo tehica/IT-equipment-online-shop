@@ -1,0 +1,108 @@
+﻿@model ShoppingCartViewModel
+
+@using Microsoft.Extensions.Options
+@*@inject IOptions<OnlineShop.Utilities.StripePayment> Stripe*@
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<br />
+<h1 class="text-warning text-center">Shopping Cart</h1>
+<hr />
+<br />
+
+@if (Model.AllCarts.Count > 0)
+{
+    <div class="container">
+        <div class="card">
+            <div class="card-body">
+
+                @foreach (var item in Model.AllCarts)
+                {
+
+                    <div class="row">
+                        <div class="d-none d-lg-block col-lg-2 text-center py-2">
+                            <img src="~/images/products/@item.Product.Image" class="rounded" width="120" height="80" />
+                        </div>
+                        <div class="col-12 text-sm-center col-lg-5 text-lg-left" style="line-height: 100px;">
+                            <h4><strong>@item.Product.Name</strong></h4>
+                        </div>
+                        <div class="col-12 text-sm-center col-lg-5 text-lg-right row">
+                            <div class="col-4 text-md-right" style="padding-top:5px;">
+                                <h6><strong>$@item.Product.Price <span class="text-muted">x</span> @item.Quantity </strong></h6>
+                            </div>
+                            <div class="col-6 col-sm-4 col-lg-6">
+                                <div class="float-right mx-1">
+                                        @*<button type="submit" class="btn btn-primary" asp-action="Plus" asp-route-Id="item.Id">
+                                        +
+                                    </button>*@
+                                    <a asp-action="Plus" asp-route-Id="@item.Id" class="btn btn-outline-primary">+</a>
+                                </div>
+                                <div class="float-right mx-1">
+                                    @*<button type="submit" class="btn btn-outline-danger" asp-action="Minus" asp-route-Id="@item.Id">
+                                            -
+                                        </button>*@
+                                    <a asp-action="Minus" asp-route-Id="@item.Id" class="btn btn-outline-danger">-</a>
+                                </div>
+                            </div>
+                            <div class="col-2 col-sm-4 col-lg-2 text-right">
+
+                                @*<button type="submit" class="btn btn-outline-danger" asp-action="Remove" asp-route-Id="item.Id">
+                                        Remove
+                                    </button>*@
+
+                                <a asp-action="Remove" asp-route-Id="@item.Id" class="btn btn-outline-danger">Remove</a>
+                            </div>
+                        </div>
+                    </div>
+                    <hr />
+                }
+                <!-- -->
+            </div>
+            <div class="card-footer">
+
+                <div class="col-12 col-md-6 offset-md-1 col-lg-4 offset-lg-3 pr-4">
+                    <ul class="list-group">
+                        <li class="list-group-item d-flex justify-content-between bg-light">
+                            <span class="font-weight-bold"> Total :</span>
+                            <strong class="font-weight-bold">$ <span id="txtOrderTotal">@Model.TotalPrice</span></strong>
+                        </li>
+                    </ul>
+                </div>
+
+                @*@{
+                    var TotalPrice = Model.TotalPrice * 100;
+                }
+                <script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+                        data-key="@Stripe.Value.PublishableKey>"
+                        data-amount="@TotalPrice"
+                        data-name="IT equipment"
+                        data-description="Payment."
+                        data-locale="auto"
+                        data-allow-remember-me="false"
+                        data-image="https://stripe.com/img/documentation/checkout/marketplace.png">
+                </script>
+                <script>
+                    document.getElementsByClassName("stripe-button-el")[0].style.display = "none";
+                </script>*@
+                <div class="col-12 col-md-6 offset-md-1 col-lg-4 offset-lg-3 pr-4">
+                    <button type="submit" id="btnPlaceOrder" onclick="return validateInput()" value="Pay" class="btn btn-success form-control">Pay</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+}
+else
+{
+    <h3 class="display-4 text-center mb-5">Your cart is empty.</h3>
+    <div class="list-group-item">
+        <h2>
+            <a asp-area="Customer" asp-controller="Home" asp-action="Index"
+               class="nav-link text-success text-center font-weight-bold m-3">
+                + Add Products in Cart
+            </a>
+        </h2>
+    </div>
+}

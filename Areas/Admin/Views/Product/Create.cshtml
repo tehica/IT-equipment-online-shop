@@ -1,0 +1,91 @@
+﻿@model ProductAndCategoryViewModel
+@using OnlineShop.Extensions
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create Product</h1>
+<hr />
+<br />
+<div class="row">
+    <div class="col-md-10">
+        <form asp-action="Create" method="post" enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="form-group row">
+                <div class="col-2">
+                    <label asp-for="Product.Name" class="col-form-label"></label>
+                </div>
+                <div class="col-10">
+                    <input asp-for="Product.Name" class="form-control" />
+                    <span asp-validation-for="Product.Name" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <div class="col-2">
+                    <label asp-for="Product.Description" class="col-form-label"></label>
+                </div>
+                <div class="col-10">
+                    <textarea asp-for="Product.Description" class="form-control"></textarea>
+                    <span asp-validation-for="Product.Description" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <div class="col-2">
+                    <label asp-for="Product.Price" class="col-form-label"></label>
+                </div>
+                <div class="col-10">
+                    <input asp-for="Product.Price" class="form-control" />
+                    <span asp-validation-for="Product.Price" class="text-danger"></span>
+                </div>
+            </div>
+
+
+            <div class="form-group row">
+                <div class="col-2">
+                    <label asp-for="Product.CategoryId" class="col-form-label"></label>
+                </div>
+                <div class="col-10">
+                    <select asp-for="Product.CategoryId"
+                            asp-items="Model.CategoryList.ToSelectListItem(Model.Product.CategoryId)" class="form-control">
+                        <option value="0">Choose category</option>
+                    </select>
+                    <span asp-validation-for="Product.CategoryId" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <div class="col-2">
+                    <label asp-for="Product.Image" class="col-form-label"></label>
+                </div>
+                <div class="col-10">
+                    <input asp-for="Product.ImageUpload" class="form-control" />
+                    <span asp-validation-for="Product.ImageUpload" class="text-danger"></span>
+                </div>
+            </div>
+            <img src="" id="imgpreview" alt="" />
+
+            <div class="form-group row">
+                <div class="col-6 offset-2">
+                    <partial name="_CreateAndBackToListButtons" />
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+@section Scripts{
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script>
+        CKEDITOR.replace("Product.Description");
+
+        $("#ImageUpload").change(function () {
+            readURL(this);
+        });
+    </script>
+}
